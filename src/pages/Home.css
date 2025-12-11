@@ -1,0 +1,13 @@
+.textContainer{
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    
+}
+
+.hackColumn{
+    /* height: 100vh; */
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+}
