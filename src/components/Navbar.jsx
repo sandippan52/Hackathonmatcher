@@ -12,6 +12,7 @@ const Navbar = () => {
                 <NavLink className={(e)=>{return e.isActive?"red":""}} to="/login"><li>Login</li></NavLink>
                 <NavLink className={(e)=>{return e.isActive?"red":""}} to="/createteam"><li>Create Team</li></NavLink>
                 <NavLink className={(e)=>{return e.isActive?"red":""}} to="/profile"><li>Your Profile</li></NavLink>
+                <NavLink className={(e)=>{return e.isActive?"red":""}} to="/logout"><li>Logout</li></NavLink>
             </ul>
         </nav>
     </div>

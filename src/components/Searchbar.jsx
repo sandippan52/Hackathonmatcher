@@ -2,13 +2,19 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import "./Searchbar.css"
-
+axios.defaults.baseURL = "http://localhost:3000";
+axios.defaults.withCredentials = true;
 
 
 const Searchbar = () => {
 
 const [query, setQuery] = useState("");
 const [results, setResults] = useState([]);
+
+
+const [sentRequests, setSentRequests] = useState(new Set())
+
+
 const handleSearch = async(e)=>{
   e.preventDefault();
 
@@ -20,6 +26,28 @@ const handleSearch = async(e)=>{
   }
   catch(error){
     console.log("Error searching coders : ", error);
+  }
+
+}
+
+const handleSendRequest = async(receiverId) =>{
+  
+
+  try{
+
+    const res = await axios.post ("/send-request", {receiverId})
+    
+    alert(res.data.message)
+
+    setSentRequests(prev => new Set(prev).add(receiverId))
+
+  }catch(error){
+    if(error.response){
+      alert(error.response.data.message)
+    } else{
+      alert("Something went wrong")
+    }
+
   }
 
 }
@@ -47,6 +75,11 @@ const handleSearch = async(e)=>{
                   <p><strong>Skills :</strong>{coder.skills}</p>
                   <p><strong>College :</strong>{coder.college}</p>
                   <p><strong>Year :</strong>{coder.year}</p>
+                  <button
+                  onClick={()=>handleSendRequest(coder._id)}
+                  disabled = {sentRequests.has(coder._id)}
+                  style={{backgroundColor: sentRequests.has(coder._id)?'grey':'green' }}
+                  >Request to join</button>
                 </div>
               ))
             ) : (

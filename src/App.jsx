@@ -6,7 +6,7 @@ import CreateTeam from "./pages/CreateTeam"
 import Profile from "./pages/Profile"
 import Navbar from "./components/Navbar"
 import Searchbar from "./components/Searchbar"
-
+import Logout from "./pages/Logout"
 function App() {
   const router = createBrowserRouter([
     {
@@ -34,6 +34,10 @@ function App() {
       path:"/search",
       element:<> <Navbar/> <Searchbar/>  </>
 
+    },
+    {
+      path:"/logout",
+      element:<><Navbar/><Logout/></>
     }
 
   ])
