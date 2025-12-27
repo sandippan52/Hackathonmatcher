@@ -14,6 +14,11 @@ receiver :{
     ref: 'Coder',
     required: true
 },
+team:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"Team",
+    required: true
+},
 
 status:{
     type : String,

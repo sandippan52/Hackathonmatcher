@@ -6,7 +6,7 @@ axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.withCredentials = true;
 
 
-const Searchbar = () => {
+const Searchbar = ({teamId}) => {
 
 const [query, setQuery] = useState("");
 const [results, setResults] = useState([]);
@@ -35,7 +35,7 @@ const handleSendRequest = async(receiverId) =>{
 
   try{
 
-    const res = await axios.post ("/send-request", {receiverId})
+    const res = await axios.post ("/send-request", {receiverId, teamId})
     
     alert(res.data.message)
 
@@ -51,6 +51,18 @@ const handleSendRequest = async(receiverId) =>{
   }
 
 }
+
+const handleTeamCreation = async () => {
+  try {
+    const res = await axios.post("/create-team");
+    alert("Team created successfully");
+    console.log(res.data);
+  } catch (err) {
+    console.error(err);
+    alert("Failed to create team");
+  }
+};
+
 
 
   return (
@@ -91,6 +103,9 @@ const handleSendRequest = async(receiverId) =>{
 
       </div>
 
+       <button onClick={handleTeamCreation}>
+  Create Team First
+</button>
 
 
     </div>

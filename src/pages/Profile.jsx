@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import axios from 'axios'
 
+
 axios.defaults.baseURL ="http://localhost:3000"
 axios.defaults.withCredentials = true
 
@@ -41,6 +42,23 @@ useEffect(()=>{
 
 },[])
 
+const handleAccept = async(req)=>{
+  console.log("ACCEPT CLICKED");
+  console.log("teamId being sent:", req.team);
+  console.log("memberId being sent:", req.receiver);
+  try{
+
+      const res = await axios.post("http://localhost:3000/accept-request",{teamId :req.team, memberId : req.receiver },{withCredentials:true})
+      alert(res.data.message)
+      //  setRequests(prev => prev.filter(req => req._id !== requestId))
+      //  window.location.href = "/";
+  }catch(error){
+    console.error("AXIOS ERROR:", error.response?.data || error.message);
+    alert("Failed to accept")
+
+  }
+}
+
 if(loading) return <p>Loading profile....</p>
 if(error) return <p>{error}</p>
 
@@ -63,7 +81,7 @@ if(error) return <p>{error}</p>
                   Skills: {req.sender.skills} | College: {req.sender.college}
                 </p>
                 <div className="actions">
-                  <button style={{ marginRight: '10px', background: 'green', color: 'white' }}>Accept</button>
+                  <button onClick={()=>handleAccept(req)} style={{ marginRight: '10px', background: 'green', color: 'white' }}>Accept</button>
                   <button style={{ background: 'red', color: 'white' }}>Decline</button>
                 </div>
               </div>

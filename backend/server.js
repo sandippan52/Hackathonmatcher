@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 
 import {Coder} from './models/CoderData.js'
 import { Request } from './models/Request.js'
+import { Team } from './models/Team.js'
 
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
@@ -153,14 +154,23 @@ app.post("/send-request", requireLogin, async(req,res)=>{
   
 
 try{
-  const {receiverId} = req.body
+  const {receiverId,teamId} = req.body
   const senderId = req.session.userId
+
+  if (!teamId) {
+    return res.status(400).json({ message: "No Team ID provided. Please select a team first." });
+  }
+
+  const teamExists = await Team.findById(teamId);
+  if (!teamExists) {
+    return res.status(404).json({ message: "Team not found." });
+  }
 
   if(senderId==receiverId){
     return res.status(400).json({message:"You can not request yourself"})
   }
 
-  const existingRequest = await Request.findOne({sender:senderId, receiver: receiverId})
+  const existingRequest = await Request.findOne({sender:senderId, receiver: receiverId, team:teamId})
 
   if(existingRequest){
     return res.status(400).json({message:"Request already sent"})
@@ -169,7 +179,7 @@ try{
   const newRequest = new Request({
     sender:senderId,
     receiver:receiverId,
-    status:'pending'
+    team : teamId
   });
 
   await newRequest.save();
@@ -203,7 +213,120 @@ app.get("/my-requests",requireLogin, async(req,res)=>{
 
 } )
 
+// app.post("/accept-request", requireLogin, async(req,res)=>{
+//  try {
+//     const teamId = req.body
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ message: "Error accepting request" });
+//   }
+// })
+// app.post("/accept-request", requireLogin, async (req, res) => {
+//   try {
+//     const { teamId, memberId } = req.body;
 
+//     if (!teamId || !memberId) {
+//       return res.status(400).json({ message: "teamId and memberId required" });
+//     }
+
+//     const team = await Team.findById(teamId);
+
+// console.log("teamId:", teamId);
+// console.log("memberId:", memberId);
+// console.log("team.members (raw):", team.members);
+// console.log(
+//   "team.members as strings:",
+//   team.members.map(m => m.toString())
+// );
+
+
+//     if (!team) {
+//       return res.status(404).json({ message: "Team not found" });
+//     }
+
+//     
+//     const alreadyInTeam = team.members.some(
+//       m => m.toString() === memberId.toString()
+//     );
+
+//     if (alreadyInTeam) {
+//       return res.status(400).json({ message: "User already in team" });
+//     }
+
+//     team.members.push(memberId);
+//     await team.save();
+
+//     await Request.deleteMany({ team: teamId, sender: memberId });
+
+//     res.status(200).json({ message: "Member added to team" });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Failed to accept" });
+//   }
+// });
+
+
+app.post("/accept-request", requireLogin, async (req, res) => {
+  console.log("ACCEPT ENDPOINT HIT");
+  console.log("teamId received:", req.body.teamId);
+  console.log("memberId received:", req.body.memberId);
+
+  const { teamId, memberId } = req.body;
+
+  
+  const updatedTeam = await Team.findByIdAndUpdate(
+    teamId,
+    { $push: { members: memberId } }, 
+    { new: true }
+  );
+
+  console.log("UPDATED TEAM:", updatedTeam);
+
+  res.json({
+    message: "Member added to team",
+    team: updatedTeam
+  });
+});
+
+
+
+
+app.get("/my-teams",requireLogin, async(req,res)=>{
+  try{
+
+    const teams = await Team.find({members:req.session.userId})
+    .populate('members','username skills')
+    .sort({createdAt: -1})
+
+res.status(200).json(teams)    
+
+  }catch(error){
+    console.log(error)
+    res.status(500).json({message:"Error fetching teams"})
+  }
+})
+
+app.post("/update-team-name", requireLogin, async(req,res)=>{
+  try{
+
+    const{teamId, newName}= req.body
+    await Team.findByIdAndUpdate(teamId,{name:newName})
+    res.status(200).json({message:"Team renamed"})
+  }catch(error){
+    console.log(error)
+    res.status(500).json({message:"Error updating name"})
+  }
+})
+
+app.post("/create-team", requireLogin, async (req, res) => {
+  console.log("CREATE TEAM ROUTE HIT");
+  const team = new Team({
+    members: [req.session.userId],
+    admin: req.session.userId
+  });
+  await team.save();
+  res.json(team);
+});
 
 
 
