@@ -1,21 +1,50 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import "./Navbar.css"
+// import "./Navbar.css"
 
 const Navbar = () => {
+   const linkClasses = ({ isActive }) =>
+    `px-3 py-2 rounded-md text-sm font-medium transition
+     ${
+       isActive
+         ? "bg-red-600 text-white"
+         : "text-gray-300 hover:bg-gray-700 hover:text-white"
+     }`;
   return (
-    <div>
-        <nav>
-            <ul>
-                <NavLink className={(e)=>{return e.isActive?"red":""}} to="/"><li>Home</li></NavLink>
-                <NavLink className={(e)=>{return e.isActive?"red":""}} to="/signup"><li>Signup</li></NavLink>
-                <NavLink className={(e)=>{return e.isActive?"red":""}} to="/login"><li>Login</li></NavLink>
-                <NavLink className={(e)=>{return e.isActive?"red":""}} to="/createteam"><li>Create Team</li></NavLink>
-                <NavLink className={(e)=>{return e.isActive?"red":""}} to="/profile"><li>Your Profile</li></NavLink>
-                <NavLink className={(e)=>{return e.isActive?"red":""}} to="/logout"><li>Logout</li></NavLink>
-            </ul>
-        </nav>
-    </div>
+   <nav className="bg-black border-b border-gray-800">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex h-14 items-center justify-between">
+          
+          
+          <div className="text-white font-semibold text-lg">
+            HackathonMatcher
+          </div>
+
+          
+          <ul className="flex space-x-2">
+            <NavLink to="/" className={linkClasses}>
+              Home
+            </NavLink>
+            <NavLink to="/signup" className={linkClasses}>
+              Signup
+            </NavLink>
+            <NavLink to="/login" className={linkClasses}>
+              Login
+            </NavLink>
+            <NavLink to="/createteam" className={linkClasses}>
+              Create Team
+            </NavLink>
+            <NavLink to="/profile" className={linkClasses}>
+              Your Profile
+            </NavLink>
+            <NavLink to="/logout" className={linkClasses}>
+              Logout
+            </NavLink>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
   )
 }
 

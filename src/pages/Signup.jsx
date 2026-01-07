@@ -1,7 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { data } from 'react-router-dom'
-import './Signup.css'
+// import './Signup.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 axios.defaults.baseURL = "http://localhost:3000"
@@ -38,23 +38,108 @@ const Signup = () => {
   }
 
   return (
-    <div className='formBox'>
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register("username", {required:{value: true, message:"This field is required"},maxLength:{value:10, message:"Maximum permitted length is 10" }, minLength:{value:5, message:"Minimum permitted length is 5"}})} placeholder='Username'/>
-      {errors.username && <span></span>}
-       <br />
-      <input {...register("email", {required:{value:true, message:"This field is required"}})} placeholder='Email'/> <br />
-      <input {...register("password",{required:{value:true, message:"This field is required"}, maxLength:{value:10, message:"Maximum password length is 10"}, minLength:{value:5, message:"Minimum password length is 5"}})} placeholder='Password'/>
-      {errors.password &&<div className='red'>{errors.password.message}</div>}
-       <br />
-      <input {...register("skills",{required:{value:true, message:"Skill is required to create an account"}})} placeholder='Skills'/> <br />
-      <input {...register("college")} placeholder='College'/> <br />
-      <input {...register("course")} placeholder='Course'/> <br />
-      <input {...register("year")} placeholder='year' type='number'/> <br />
-      <button type='input'>Sign Up</button>
+     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-6">
+        
+        
+        <h2 className="text-2xl font-bold text-gray-800 text-center">
+          Create your account
+        </h2>
+        <p className="text-gray-500 text-sm text-center mt-1">
+          Join teams, collaborate, and build together
+        </p>
 
-    </form>
+        
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
+
+          <input
+            {...register("username", {
+              required: "Username is required",
+              minLength: { value: 5, message: "Minimum 5 characters" },
+              maxLength: { value: 10, message: "Maximum 10 characters" }
+            })}
+            placeholder="Username"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.username && (
+            <p className="text-red-500 text-sm">{errors.username.message}</p>
+          )}
+
+          <input
+            {...register("email", { required: "Email is required" })}
+            placeholder="Email"
+            type="email"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email.message}</p>
+          )}
+
+          <input
+            {...register("password", {
+              required: "Password is required",
+              minLength: { value: 5, message: "Minimum 5 characters" },
+              maxLength: { value: 10, message: "Maximum 10 characters" }
+            })}
+            placeholder="Password"
+            type="password"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password.message}</p>
+          )}
+
+          <input
+            {...register("skills", {
+              required: "Skills are required"
+            })}
+            placeholder="Skills (e.g. React, Node, MongoDB)"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.skills && (
+            <p className="text-red-500 text-sm">{errors.skills.message}</p>
+          )}
+
+          <input
+            {...register("college")}
+            placeholder="College (optional)"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <input
+            {...register("course")}
+            placeholder="Course (optional)"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <input
+            {...register("year")}
+            placeholder="Year"
+            type="number"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+          >
+            Sign Up
+          </button>
+        </form>
+
+        
+        <p className="text-center text-sm text-gray-500 mt-4">
+          Already have an account?{" "}
+          <span
+            onClick={() => navigate("/login")}
+            className="text-blue-600 cursor-pointer hover:underline"
+          >
+            Login
+          </span>
+        </p>
+      </div>
     </div>
+
   )
 }
 

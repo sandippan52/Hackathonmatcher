@@ -140,7 +140,9 @@ app.get("/search",requireLogin, async(req, res)=>{
     const results = await Coder.find({
       skills : {$regex : skill, $options : "i" }
     }).select("-password")
-   
+
+    
+    
     res.status(200).json(results)
   }
   catch(error){
@@ -270,8 +272,9 @@ app.post("/accept-request", requireLogin, async (req, res) => {
   console.log("ACCEPT ENDPOINT HIT");
   console.log("teamId received:", req.body.teamId);
   console.log("memberId received:", req.body.memberId);
+  console.log("requestID received:", req.body.requestID);
 
-  const { teamId, memberId } = req.body;
+  const { teamId, memberId, requestID } = req.body;
 
   
   const updatedTeam = await Team.findByIdAndUpdate(
@@ -279,6 +282,8 @@ app.post("/accept-request", requireLogin, async (req, res) => {
     { $push: { members: memberId } }, 
     { new: true }
   );
+
+  await Request.findByIdAndDelete(requestID)
 
   console.log("UPDATED TEAM:", updatedTeam);
 
@@ -288,6 +293,30 @@ app.post("/accept-request", requireLogin, async (req, res) => {
   });
 });
 
+app.post("/decline-request", requireLogin, async (req, res) => {
+  try {
+    const { requestId } = req.body;
+
+
+
+    if (!requestId) {
+      
+      return res.status(400).json({ message: "requestId required" });
+    }
+
+    await Request.findByIdAndDelete(requestId);
+
+    res.json({ message: "Request declined" });
+  } catch (err) {
+
+
+    console.error(err);
+
+    res.status(500).json({ message: "Failed to decline request" });
+  }
+});
+
+
 
 
 
@@ -295,8 +324,11 @@ app.get("/my-teams",requireLogin, async(req,res)=>{
   try{
 
     const teams = await Team.find({members:req.session.userId})
-    .populate('members','username skills')
+    .populate('members','username')
+    .populate('admin',' _id username ')
     .sort({createdAt: -1})
+
+    
 
 res.status(200).json(teams)    
 
