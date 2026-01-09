@@ -33,12 +33,30 @@ app.set("trust proxy", 1);
 
 
 
+const allowedOrigins = [
+  "https://hackathonmatcher.vercel.app",
+  "https://hackathon-matcher.vercel.app"
+];
+
 app.use(
   cors({
-  origin:"https://hackathon-matcher.vercel.app",
-  credentials: true
+    origin: function (origin, callback) {
+      // allow requests with no origin (Postman, curl)
+      if (!origin) return callback(null, true);
 
-}))
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+app.options("*", cors());
+
+
 app.use(express.json());
 
 
