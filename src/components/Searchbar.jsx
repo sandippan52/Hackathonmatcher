@@ -2,9 +2,10 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 // import "./Searchbar.css"
-axios.defaults.baseURL = "http://localhost:3000";
+// axios.defaults.baseURL = "http://localhost:3000";
+// axios.defaults.withCredentials = true;
+axios.defaults.baseURL= import.meta.env.VITE_API_URL;
 axios.defaults.withCredentials = true;
-
 
 const Searchbar = ({teamId}) => {
 
@@ -21,7 +22,7 @@ const handleSearch = async(e)=>{
   if(!query.trim()) return;
 
   try{
-    const response = await axios.get(`http://localhost:3000/search?skill=${query}`)
+    const response = await axios.get(`/search?skill=${query}`)
 
     setResults(response.data)
   }
