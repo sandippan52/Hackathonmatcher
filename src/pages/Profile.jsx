@@ -63,6 +63,7 @@ catch (err) {
         alert(res.data.message)
         //  setRequests(prev => prev.filter(req => req._id !== requestId))
         //  window.location.href = "/";
+         window.location.reload();
     }catch(error){
       console.error("AXIOS ERROR:", error.response?.data || error.message);
       alert("Failed to accept")

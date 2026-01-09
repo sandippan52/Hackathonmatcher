@@ -33,6 +33,24 @@ const Home = () => {
     fetchTeams();
   }, []);
 
+  const deleteTeam = async (teamId) =>{
+     const confirmation = prompt(
+    'Type YES to permanently delete this team'
+  );
+
+  if (!confirmation || confirmation.toLowerCase() !== 'yes') {
+    alert('Team deletion cancelled');
+    return;
+  }
+    try{
+      await axios.post("/delete-team",{teamId}, {withCredentials:true});
+      fetchTeams();
+    }catch(err){
+    console.log("DELETE TEAM ERROR:", err.response);
+  alert(err.response?.data?.message || "Failed to delete team");
+    }
+  }
+
   const handleRename = async (teamId) => {
     const newName = prompt("Enter new team name:");
     if (!newName) return;
@@ -73,12 +91,23 @@ const Home = () => {
                 <h3 className="text-xl font-semibold text-gray-800">
                   {team.name}
                 </h3>
+
+                { team.admin._id == currentUserId &&(
                 <button
+                onClick={()=> deleteTeam(team._id)}
+                className="text-sm text-blue-600 hover:underline"
+                >Delete Team
+                </button>)
+}
+                
+
+                { team.admin._id == currentUserId && (
+                  <button
                   onClick={() => handleRename(team._id)}
                   className="text-sm text-blue-600 hover:underline"
                 >
                   Rename
-                </button>
+                </button>)}
               </div>
 
               
@@ -95,8 +124,14 @@ const Home = () => {
                       {member.username}
                     </span>
                   ))}
+
+                 
+
+
                 </div>
               </div>
+
+              
 
               
               {team.admin._id === currentUserId && (

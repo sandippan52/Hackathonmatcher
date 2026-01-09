@@ -277,11 +277,18 @@ app.post("/accept-request", requireLogin, async (req, res) => {
   const { teamId, memberId, requestID } = req.body;
 
   
+  // const updatedTeam = await Team.findByIdAndUpdate(
+  //   teamId,
+  //   { $push: { members: memberId } }, 
+  //   { new: true }
+  // );
+
   const updatedTeam = await Team.findByIdAndUpdate(
     teamId,
-    { $push: { members: memberId } }, 
-    { new: true }
-  );
+    {$addToSet: {members:memberId}},
+    {new: true}
+  )
+
 
   await Request.findByIdAndDelete(requestID)
 
@@ -300,7 +307,7 @@ app.post("/decline-request", requireLogin, async (req, res) => {
 
 
     if (!requestId) {
-      
+
       return res.status(400).json({ message: "requestId required" });
     }
 
@@ -336,6 +343,21 @@ res.status(200).json(teams)
     console.log(error)
     res.status(500).json({message:"Error fetching teams"})
   }
+})
+
+app.post("/delete-team", requireLogin,async(req,res) =>{
+res.send("DELETE TEAM ROUTE HIT");
+try{
+const {teamId} = req.body
+await Team.findByIdAndDelete(teamId)
+res.status(200).json({message:"Team Deleted"})
+}
+catch(err){
+console.log(err)
+res.status(500).json({message:"Error deleting team."})
+}
+
+
 })
 
 app.post("/update-team-name", requireLogin, async(req,res)=>{
