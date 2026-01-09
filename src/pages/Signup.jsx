@@ -4,8 +4,7 @@ import { data } from 'react-router-dom'
 // import './Signup.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-// axios.defaults.baseURL = "http://localhost:3000"
-// axios.defaults.withCredentials = true
+
 
 axios.defaults.baseURL= import.meta.env.VITE_API_URL;
 axios.defaults.withCredentials = true;

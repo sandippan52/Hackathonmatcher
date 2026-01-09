@@ -17,7 +17,7 @@ const Home = () => {
   
   const fetchTeams = async () => {
     try {
-      // const res = await axios.get("http://localhost:3000/my-teams", {withCredentials:true});
+      
        const res = await axios.get(`${import.meta.env.VITE_API_URL}/my-teams`, {withCredentials:true});
        
       setTeams(res.data);
@@ -62,7 +62,7 @@ const Home = () => {
     if (!newName) return;
 
     try {
-      // await axios.post("http://localhost:3000/update-team-name", { teamId, newName });
+    
       await axios.post(`${import.meta.env.VITE_API_URL}/update-team-name`, { teamId, newName });
 
       fetchTeams(); 
