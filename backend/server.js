@@ -32,11 +32,12 @@ const port = process.env.PORT || 3000
 app.set("trust proxy", 1);
 
 
-
-const allowedOrigins = [
-  "https://hackathonmatcher.vercel.app",
-  "https://hackathon-matcher.vercel.app"
-];
+app.use(
+  cors({
+    origin: "https://hackathon-matcher.vercel.app",
+    credentials: true,
+  })
+);
 
 app.use(
   cors({
@@ -54,7 +55,7 @@ app.use(
   })
 );
 
-app.options("/*", cors());
+
 
 
 app.use(express.json());
