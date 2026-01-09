@@ -53,6 +53,11 @@ app.use(
   })
 )
 
+app.get("/", (req, res) => {
+  res.status(200).send("HackathonMatcher backend is running 🚀");
+});
+
+
 app.post("/signup", async(req, res)=>{
 
 try{
