@@ -1,3 +1,6 @@
+import dotenv from "dotenv"
+dotenv.config()
+
 import express from 'express'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -13,13 +16,17 @@ import cors from "cors"
 import bcrypt from "bcryptjs";
 
 
+console.log("MONGO_URI =", process.env.MONGO_URI);
+
+
+await mongoose.connect(process.env.MONGO_URI);
+console.log("MongoDB connected");
 
 
 
-const a = await mongoose.connect("mongodb://localhost:27017/CoderData")
 
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000
 app.use(cors({
   origin:"http://localhost:5173",
   credentials: true
@@ -34,7 +41,7 @@ const __dirname = path.dirname(__filename)
 app.use(
   session({
   name: "hackathonmatcher.sid",
-  secret : "supersecretkey",
+  secret : process.env.SESSION_SECRET,
   resave : false,
   saveUninitialized : false,
   store : MongoStore.create({mongoUrl: "mongodb://localhost:27017/CoderData"}),
