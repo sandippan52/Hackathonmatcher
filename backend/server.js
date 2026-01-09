@@ -23,16 +23,16 @@ await mongoose.connect(process.env.MONGO_URI);
 console.log("MongoDB connected");
 
 
+app.set("trust proxy", 1);
 
 
 const app = express()
 const port = process.env.PORT || 3000
-app.use(cors({
-  origin:["http://localhost:5173",
-  "https://hackathonmatcher.vercel.app"
-  ],
-
+app.use(
+  cors({
+  origin:"https://hackathon-matcher.vercel.app",
   credentials: true
+
 }))
 app.use(express.json());
 
@@ -49,8 +49,10 @@ app.use(
   saveUninitialized : false,
   store : MongoStore.create({mongoUrl: "mongodb://localhost:27017/CoderData"}),
   cookie : {
-    maxAge : 1000*60*60,
-    httpOnly: true
+    httpOnly: true,
+    secure: true,
+    sameSite: "none"
+
   }
 
   })
