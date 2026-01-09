@@ -34,7 +34,7 @@ app.set("trust proxy", 1);
 
 app.use(
   cors({
-    origin: "https://hackathon-matcher.vercel.app",
+    origin: "https://hackathonmatcher.vercel.app",
     credentials: true,
   })
 );
