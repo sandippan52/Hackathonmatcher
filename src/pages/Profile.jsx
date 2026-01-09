@@ -5,8 +5,11 @@
   import axios from 'axios'
 
 
-  axios.defaults.baseURL ="http://localhost:3000"
-  axios.defaults.withCredentials = true
+  // axios.defaults.baseURL ="http://localhost:3000"
+  // axios.defaults.withCredentials = true
+
+axios.defaults.baseURL= import.meta.env.VITE_API_URL;
+axios.defaults.withCredentials = true;
 
 
 
@@ -59,7 +62,7 @@ catch (err) {
     console.log("memberId being sent:", req.receiver);
     try{
 
-        const res = await axios.post("http://localhost:3000/accept-request",{teamId :req.team, memberId : req.receiver, requestID : req._id },{withCredentials:true})
+        const res = await axios.post("/accept-request",{teamId :req.team, memberId : req.receiver, requestID : req._id },{withCredentials:true})
         alert(res.data.message)
         //  setRequests(prev => prev.filter(req => req._id !== requestId))
         //  window.location.href = "/";

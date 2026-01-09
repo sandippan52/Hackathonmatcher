@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 // import './Home.css';
 import { useNavigate } from 'react-router-dom'
-axios.defaults.baseURL= "http://localhost:3000";
+axios.defaults.baseURL= import.meta.env.VITE_API_URL;
 axios.defaults.withCredentials = true;
 
 
@@ -17,7 +17,9 @@ const Home = () => {
   
   const fetchTeams = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/my-teams", {withCredentials:true});
+      // const res = await axios.get("http://localhost:3000/my-teams", {withCredentials:true});
+       const res = await axios.get(`${import.meta.env.VITE_API_URL}/my-teams`, {withCredentials:true});
+       
       setTeams(res.data);
     } catch (error) {
       console.log("Not logged in or no teams");
@@ -26,7 +28,9 @@ const Home = () => {
 
   useEffect(() => {
     const fetchUser = async()=>{
-      const res = await axios.get("/me")
+      // const res = await axios.get("/me")
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/me`)
+
       setCurrentUserId(res.data.user._id)
     }
     fetchUser();
@@ -43,7 +47,9 @@ const Home = () => {
     return;
   }
     try{
-      await axios.post("/delete-team",{teamId}, {withCredentials:true});
+      // await axios.post("/delete-team",{teamId}, {withCredentials:true});
+      await axios.post(`${import.meta.env.VITE_API_URL}/delete-team`,{teamId}, {withCredentials:true});
+
       fetchTeams();
     }catch(err){
     console.log("DELETE TEAM ERROR:", err.response);
@@ -56,7 +62,9 @@ const Home = () => {
     if (!newName) return;
 
     try {
-      await axios.post("http://localhost:3000/update-team-name", { teamId, newName });
+      // await axios.post("http://localhost:3000/update-team-name", { teamId, newName });
+      await axios.post(`${import.meta.env.VITE_API_URL}/update-team-name`, { teamId, newName });
+
       fetchTeams(); 
     } catch (error) {
       alert("Error renaming");
