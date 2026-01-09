@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 // import './Home.css';
 import { useNavigate } from 'react-router-dom'
-axios.defaults.baseURL= import.meta.env.VITE_API_URL;
-axios.defaults.withCredentials = true;
+
 
 
 const Home = () => {
@@ -18,7 +17,7 @@ const Home = () => {
   const fetchTeams = async () => {
     try {
       
-       const res = await axios.get(`${import.meta.env.VITE_API_URL}/my-teams`, {withCredentials:true});
+       const res = await api.get("/my-teams", {withCredentials:true});
        
       setTeams(res.data);
     } catch (error) {
@@ -29,7 +28,7 @@ const Home = () => {
   useEffect(() => {
     const fetchUser = async()=>{
       // const res = await axios.get("/me")
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/me`)
+      const res = await api.get("/me")
 
       setCurrentUserId(res.data.user._id)
     }
@@ -48,7 +47,7 @@ const Home = () => {
   }
     try{
       // await axios.post("/delete-team",{teamId}, {withCredentials:true});
-      await axios.post(`${import.meta.env.VITE_API_URL}/delete-team`,{teamId}, {withCredentials:true});
+      await api.post("/delete-team",{teamId}, {withCredentials:true});
 
       fetchTeams();
     }catch(err){
@@ -63,7 +62,7 @@ const Home = () => {
 
     try {
     
-      await axios.post(`${import.meta.env.VITE_API_URL}/update-team-name`, { teamId, newName });
+      await api.post("/update-team-name", { teamId, newName });
 
       fetchTeams(); 
     } catch (error) {

@@ -2,13 +2,11 @@
   // import "./Profile.css"
   import { useEffect } from 'react'
   import { useState } from 'react'
-  import axios from 'axios'
+  import api from '../api/axios';
 
 
   
 
-axios.defaults.baseURL= import.meta.env.VITE_API_URL;
-axios.defaults.withCredentials = true;
 
 
 
@@ -24,10 +22,10 @@ axios.defaults.withCredentials = true;
     const fetchData = async()=>{
       try{
 
-        const userRes = await axios.get("/me");
+        const userRes = await api.get("/me");
         setUser(userRes.data.user)
 
-        const reqRes = await axios.get("/my-requests")
+        const reqRes = await api.get("/my-requests")
         setRequests(reqRes.data)
 
         setLoading(false)
@@ -47,7 +45,7 @@ axios.defaults.withCredentials = true;
 
   const handleDecline = async(requestId)=>{
 try {
-   await axios.post("/decline-request", { requestId });
+   await api.post("/decline-request", { requestId });
 
 } 
 catch (err) {
@@ -61,7 +59,7 @@ catch (err) {
     console.log("memberId being sent:", req.receiver);
     try{
 
-        const res = await axios.post("/accept-request",{teamId :req.team, memberId : req.receiver, requestID : req._id },{withCredentials:true})
+        const res = await api.post("/accept-request",{teamId :req.team, memberId : req.receiver, requestID : req._id },{withCredentials:true})
         alert(res.data.message)
         //  setRequests(prev => prev.filter(req => req._id !== requestId))
         //  window.location.href = "/";

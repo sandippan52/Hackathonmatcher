@@ -1,13 +1,8 @@
 import React from 'react'
-import axios from 'axios'
+import api from '../api/axios';
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-
-
-
-axios.defaults.baseURL= import.meta.env.VITE_API_URL;
-axios.defaults.withCredentials = true;
 
 
 const Login = () => {
@@ -21,7 +16,7 @@ const Login = () => {
    e.preventDefault();
    setError("");
    try{
-    await axios.post("/login",{email, password});
+    await api.post("/login",{email, password});
     navigate("/createteam")
    }
    catch(err){

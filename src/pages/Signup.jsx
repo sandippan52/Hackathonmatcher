@@ -2,12 +2,11 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { data } from 'react-router-dom'
 // import './Signup.css'
-import axios from 'axios'
+import api from '../api/axios'
 import { useNavigate } from 'react-router-dom'
 
 
-axios.defaults.baseURL= import.meta.env.VITE_API_URL;
-axios.defaults.withCredentials = true;
+
 
 
 
@@ -24,7 +23,7 @@ const Signup = () => {
 
   const onSubmit = async(data) => {
     try{
-     const res = await axios.post("/signup", data)
+     const res = await api.post("/signup", data)
      alert(res.data.message)
      navigate("/login")
     }

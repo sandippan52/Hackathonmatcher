@@ -2,8 +2,8 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 
-axios.defaults.baseURL= import.meta.env.VITE_API_URL;
-axios.defaults.withCredentials = true;
+import api from "../api/axios"; 
+
 
 const Searchbar = ({teamId}) => {
 
@@ -20,7 +20,7 @@ const handleSearch = async(e)=>{
   if(!query.trim()) return;
 
   try{
-    const response = await axios.get(`/search?skill=${query}`)
+    const response = await api.get(`/search?skill=${query}`)
 
     setResults(response.data)
   }
@@ -35,7 +35,7 @@ const handleSendRequest = async(receiverId) =>{
 
   try{
 
-    const res = await axios.post ("/send-request", {receiverId, teamId})
+    const res = await api.post ("/send-request", {receiverId, teamId})
     
     alert(res.data.message)
 
@@ -54,7 +54,7 @@ const handleSendRequest = async(receiverId) =>{
 
 const handleTeamCreation = async () => {
   try {
-    const res = await axios.post("/create-team");
+    const res = await api.post("/create-team");
     alert("Team created successfully");
     console.log(res.data);
   } catch (err) {

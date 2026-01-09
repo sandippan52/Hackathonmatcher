@@ -1,10 +1,9 @@
 import React from 'react'
-import axios from 'axios'
+import api from '../api/axios';
 
 
 
-axios.defaults.baseURL= import.meta.env.VITE_API_URL;
-axios.defaults.withCredentials = true;
+
 
 
 const Logout = () => {
@@ -12,7 +11,7 @@ const Logout = () => {
 const handleLogout = async() => {
 
 try{
-await axios.post("/logout")
+await api.post("/logout")
 alert("Successfullty logged out")
 }
 catch(error){
