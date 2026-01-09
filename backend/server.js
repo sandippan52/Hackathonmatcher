@@ -23,11 +23,16 @@ await mongoose.connect(process.env.MONGO_URI);
 console.log("MongoDB connected");
 
 
-app.set("trust proxy", 1);
+// app.set("trust proxy", 1);
 
 
 const app = express()
 const port = process.env.PORT || 3000
+
+app.set("trust proxy", 1);
+
+
+
 app.use(
   cors({
   origin:"https://hackathon-matcher.vercel.app",
